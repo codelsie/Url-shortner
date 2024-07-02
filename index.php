@@ -1,6 +1,10 @@
 <?php
 require 'includes/connection.php';
-require 'shorten.php';
+require 'urlmanager.php';
+
+$urlManager = new UrlManager($conn);
+$url = $urlManager->shortenUrl();
+
 require 'includes/template/header.php';?>
 
     <h1 class="text-center text-primary mb-4">Url shortener</h1>
@@ -13,9 +17,9 @@ require 'includes/template/header.php';?>
 
         <form method="post">
             <div>
-                <?php if(isset($link)): ?>
+                <?php if($url !== null): ?>
 
-                    <input class='form-control mb-2' type='text' id='url' value="<?php echo $short_url; ?>" required>
+                    <input class='form-control mb-2' type='text' id='url' value="<?php echo $url; ?>" required>
                     <button id="copy" type="button" class="btn btn-success">
                         Copy Url
                     </button>
