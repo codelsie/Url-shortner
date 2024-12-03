@@ -1,7 +1,7 @@
 <?php
 
-class UrlManager{
-    
+class UrlManager
+{
     public mysqli $conn;
 
     public function __construct(mysqli $conn)
@@ -11,19 +11,19 @@ class UrlManager{
 
     public function redirectToOriginalUrl(): void
     {
-    
-        if(isset($_GET['code'])){
+
+        if(isset($_GET['code'])) {
             $code = $_GET['code'];
 
             $sql = "SELECT * FROM urls WHERE short_code = '$code'";
             $result = $this->conn->query($sql);
 
-            if($result->num_rows > 0){
+            if($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
                 header("location: " . $row['original_url']);
                 exit;
 
-            }else{
+            } else {
                 echo "Url not found";
             }
         }
@@ -32,18 +32,18 @@ class UrlManager{
     public function shortenUrl(): string|null
     {
 
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $original_url = $_POST['url'];
             $short_code = substr(md5(time() . $original_url), 0, 5);
-        
+
             $sql = "INSERT INTO urls (original_url, short_code) VALUES ('$original_url', '$short_code')";
-        
-            if($this->conn->query($sql) == TRUE){
+
+            if($this->conn->query($sql) == true) {
                 return "http://localhost/url_shortner/redirect.php?code=$short_code";
-            } 
-    
-            return null;
+            }
+
         };
+        return null;
     }
 
 }
